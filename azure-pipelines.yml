@@ -1,0 +1,31 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.13'
+    addToPath: true
+  displayName: 'Install Python'
+
+- script: |
+    python --version
+    python -m pip install --upgrade pip
+  displayName: 'Check Python Version'
+
+- script: |
+    python -m pip install -r requirement.txt
+  displayName: 'Install Dependencies'
+
+- script: |
+    python -m py_compile app.py
+    python -m py_compile house.py
+  displayName: 'Validate Python Code'
+
+- script: |
+    python -c "import flask; import numpy; import pandas; import sklearn; print('All dependencies imported successfully')"
+  displayName: 'Verify Dependencies'
